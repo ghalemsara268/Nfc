@@ -27,6 +27,10 @@
         <activity
             android:name=".MusicTagMenu"/>
         <activity
+            android:name=".UpdateUrl"/>
+
+        <activity
+
             android:name=".AddNfcData">
 
             <intent-filter>

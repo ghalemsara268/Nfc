@@ -20,7 +20,7 @@ public class NfcDataBaseAdapter  extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "contactsManager";
+    private static final String DATABASE_NAME = "testNfcfinal";
 
     // Table Names
     private static final String TABLE_TODO = "todos";
@@ -158,9 +158,10 @@ public class NfcDataBaseAdapter  extends SQLiteOpenHelper {
        // Cursor cursor=db.query("NFCDATA", null, " IDTAG=?", new String[]{idTag}, " IDTAG=?", new String[]{username}, null);
         String TABLE = "NFCDATA";
        // String[] FIELDS = { "URLMUSIC" };
-        String WHERE =  "IDTAG='idTag' AND USERNAME='username'";
+        String WHERE =  "IDTAG=? AND USERNAME=?";
+        String[] args = {idTag, username};
 // Execute
-       Cursor cursor = db.query(TABLE, null, WHERE, null, null, null, null);
+       Cursor cursor = db.query(TABLE, null, WHERE, args, null, null, null);
 
         if(cursor.getCount()<1)
         {
@@ -171,6 +172,22 @@ public class NfcDataBaseAdapter  extends SQLiteOpenHelper {
         String myurl= cursor.getString(cursor.getColumnIndex("URLMUSIC"));
         cursor.close();
         return myurl;
+    }
+
+    public String getUrl(String username)
+    {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor=db.query("NFCDATA", null, " USERNAME=?", new String[]{username}, null, null, null);
+        if(cursor.getCount()<1) // UserName Not Exist
+        {
+            cursor.close();
+            return "NOT EXIST";
+        }
+        cursor.moveToFirst();
+        String url= cursor.getString(cursor.getColumnIndex("URLMUSIC"));
+        cursor.close();
+        return url;
     }
 
     public String getUser(String idTag)

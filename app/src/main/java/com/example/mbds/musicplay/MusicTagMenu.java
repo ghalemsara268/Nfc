@@ -65,7 +65,10 @@ public class MusicTagMenu extends Activity{
 
                 /// CUpdate URL
 
-
+                Intent intentUPDATE=new Intent(getApplicationContext(),UpdateUrl.class);
+                intentUPDATE.putExtra("userName",userName);
+                intentUPDATE.putExtra("tagId",TagsStorage.bytesToHex(mId));
+                startActivity(intentUPDATE);
 
 
             }
@@ -89,8 +92,9 @@ public class MusicTagMenu extends Activity{
         String id=TagsStorage.bytesToHex(mId);
         String rightUrl= nfcDataBaseAdapter.getNfcId(id,userName);
         System.out.println("user"+userName);
-         System.out.println("right"+rightUrl);
+         System.out.println("right" + rightUrl);
         System.out.println("id" + id);
+        System.out.println("url" + nfcDataBaseAdapter.getUrl(userName));
         if (rightUrl.equalsIgnoreCase("NOT EXIST")==true) {
             Toast.makeText(MusicTagMenu.this, "Dsl,le tag n'existe pas :( ajoutez le en cliquant sur ADDTAG", Toast.LENGTH_LONG).show();
             return;
@@ -104,6 +108,11 @@ public class MusicTagMenu extends Activity{
         startActivity(i);
 
     }
+
+
+
+
+
 
     @Override
     public void onPause()
@@ -120,42 +129,5 @@ public class MusicTagMenu extends Activity{
 
         nfcDataBaseAdapter.close();
     }
-
-
-
-    public void Update(View V)
-    {
-        final Dialog dialog = new Dialog(MusicTagMenu.this);
-        dialog.setContentView(R.layout.updateurl);
-        dialog.setTitle("update");
-
-        // get the Refferences of views
-        final EditText editTextUpdate=(EditText)dialog.findViewById(R.id.editTextUpdate);
-
-
-        Button btnUpdate=(Button)dialog.findViewById(R.id.buttonUpdate);
-
-        // Set On ClickListener
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View v) {
-                System.out.print("storedPassword");
-                // get The User name and Password
-                String url = editTextUpdate.getText().toString();
-
-                nfcDataBaseAdapter.updateEntry(userName, TagsStorage.bytesToHex(mId), url);
-
-
-                dialog.dismiss();
-
-
-
-        }
-    });
-
-        dialog.show();
-    }
-
-
 
 }
