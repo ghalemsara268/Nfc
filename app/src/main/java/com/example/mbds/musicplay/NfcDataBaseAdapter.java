@@ -20,7 +20,7 @@ public class NfcDataBaseAdapter  extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "testNfcfinal";
+    private static final String DATABASE_NAME = "testNfcfin";
 
     // Table Names
     private static final String TABLE_TODO = "todos";
