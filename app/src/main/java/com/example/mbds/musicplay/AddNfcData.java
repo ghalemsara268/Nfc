@@ -85,8 +85,11 @@ public class AddNfcData extends Activity {
                 } else {
                     // Save the Data in Database
                     System.out.println("monId" + monId);
-                    nfcDataBaseAdapter.insertEntry(monId,myName,myUrl,userName);
+                    nfcDataBaseAdapter.insertEntry(monId, myName, myUrl, userName);
                     Toast.makeText(getApplicationContext(), "Tag Successfully Created ", Toast.LENGTH_LONG).show();
+                    //String rightUrl= nfcDataBaseAdapter.getNfcId(monId);
+                   // System.out.println(rightUrl);
+                    System.out.println(nfcDataBaseAdapter.getUser(monId));
                 }
             }
         });

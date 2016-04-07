@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by MBDS on 06/04/2016.
@@ -121,6 +122,19 @@ public class NfcDataBaseAdapter  extends SQLiteOpenHelper {
         // Toast.makeText(context, "Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_LONG).show();
         return numberOFEntriesDeleted;
     }
+
+
+    public int deleteAll(String UserName)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where="USERNAME=?";
+        int numberOFEntriesDeleted= db.delete("NFCDATA", where, new String[]{UserName}) ;
+        // Toast.makeText(context, "Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_LONG).show();
+        return numberOFEntriesDeleted;
+
+    }
+
+
     public String getSinlgeEntry(String userName)
     {
 
@@ -137,18 +151,57 @@ public class NfcDataBaseAdapter  extends SQLiteOpenHelper {
         return password;
     }
 
+    public String getNfcId(String idTag,String username)
+    {
 
-    public void  updateEntry(String userName,String password)
+        SQLiteDatabase db = this.getReadableDatabase();
+       // Cursor cursor=db.query("NFCDATA", null, " IDTAG=?", new String[]{idTag}, " IDTAG=?", new String[]{username}, null);
+        String TABLE = "NFCDATA";
+       // String[] FIELDS = { "URLMUSIC" };
+        String WHERE =  "IDTAG='idTag' AND USERNAME='username'";
+// Execute
+       Cursor cursor = db.query(TABLE, null, WHERE, null, null, null, null);
+
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return "NOT EXIST";
+        }
+        cursor.moveToFirst();
+        String myurl= cursor.getString(cursor.getColumnIndex("URLMUSIC"));
+        cursor.close();
+        return myurl;
+    }
+
+    public String getUser(String idTag)
+    {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor=db.query("NFCDATA", null, " IDTAG=?", new String[]{idTag}, null, null, null);
+        if(cursor.getCount()<1) // UserName Not Exist
+        {
+            cursor.close();
+            return "NOT EXIST";
+        }
+        cursor.moveToFirst();
+        String usr= cursor.getString(cursor.getColumnIndex("USERNAME"));
+        cursor.close();
+        return usr;
+    }
+
+
+
+    public void  updateEntry(String userName,String idNfc,String myUrl)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         // Define the updated row content.
         ContentValues updatedValues = new ContentValues();
         // Assign values for each row.
-        updatedValues.put("USERNAME", userName);
-        updatedValues.put("PASSWORD",password);
+        updatedValues.put("URLMUSIC", myUrl);
 
-        String where="USERNAME = ?";
-        db.update("LOGIN", updatedValues, where, new String[]{userName});
+
+        String where="USERNAME ='userName' AND IDTAG='idNfc' ";
+        db.update("NFCDATA", updatedValues, where, null);
     }
 
 
